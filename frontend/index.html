@@ -1,1 +1,75 @@
 <h1>College AI Chatbot</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kings College AI</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- College Header -->
+        <header class="header">
+
+            <img src="../college-data/college-logo.jpg"
+                 alt="Kings College Logo"
+                 class="college-logo">
+
+            <div>
+                <h1>Kings College of Engineering</h1>
+                <p>Punalkulam, Pudukkottai</p>
+            </div>
+
+        </header>
+
+        <!-- Chatbot Area -->
+        <main class="chat-container">
+
+            <div class="welcome">
+                <div class="bot-icon">🤖</div>
+
+                <h2>College AI Assistant</h2>
+
+                <p>
+                    Hi! 👋 I'm your college AI assistant.
+                    Ask me anything about Kings College of Engineering.
+                </p>
+            </div>
+
+            <!-- Messages -->
+            <div id="chatBox" class="chat-box">
+
+                <div class="message bot-message">
+                    Hello! 👋 How can I help you today?
+                </div>
+
+            </div>
+
+        </main>
+
+        <!-- Message Input -->
+        <footer class="input-area">
+
+            <input
+                type="text"
+                id="userInput"
+                placeholder="Ask about your college..."
+                autocomplete="off"
+            >
+
+            <button id="sendButton">➤</button>
+
+        </footer>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
