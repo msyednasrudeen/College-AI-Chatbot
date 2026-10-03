@@ -1,1 +1,173 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
+body {
+    background: #eef3f8;
+    min-height: 100vh;
+}
+
+.app {
+    width: 100%;
+    max-width: 600px;
+    height: 100vh;
+    margin: auto;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+/* College Header */
+.header {
+    background: #123b66;
+    color: white;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.college-logo {
+    width: 58px;
+    height: 58px;
+    object-fit: contain;
+    background: white;
+    border-radius: 50%;
+    padding: 3px;
+}
+
+.header h1 {
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.header p {
+    font-size: 13px;
+    opacity: 0.9;
+}
+
+/* Chat Area */
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.welcome {
+    text-align: center;
+    margin: 20px 0 25px;
+}
+
+.bot-icon {
+    width: 65px;
+    height: 65px;
+    margin: auto;
+    border-radius: 50%;
+    background: #e5f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+}
+
+.welcome h2 {
+    margin-top: 12px;
+    color: #123b66;
+    font-size: 21px;
+}
+
+.welcome p {
+    margin-top: 8px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Chat Messages */
+.chat-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.message {
+    max-width: 82%;
+    padding: 12px 15px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.bot-message {
+    align-self: flex-start;
+    background: #e9f1fa;
+    color: #222;
+    border-bottom-left-radius: 4px;
+}
+
+.user-message {
+    align-self: flex-end;
+    background: #123b66;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+/* Input Area */
+.input-area {
+    display: flex;
+    gap: 8px;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+    background: white;
+}
+
+.input-area input {
+    flex: 1;
+    border: 1px solid #ccd5df;
+    border-radius: 25px;
+    padding: 13px 17px;
+    outline: none;
+    font-size: 14px;
+}
+
+.input-area input:focus {
+    border-color: #123b66;
+}
+
+.input-area button {
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #123b66;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.input-area button:active {
+    transform: scale(0.95);
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    .header h1 {
+        font-size: 16px;
+    }
+
+    .header p {
+        font-size: 12px;
+    }
+
+    .chat-container {
+        padding: 15px;
+    }
+
+    .welcome h2 {
+        font-size: 19px;
+    }
+  }
