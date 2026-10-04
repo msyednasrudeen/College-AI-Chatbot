@@ -1,1 +1,33 @@
+{
+  "college": {
+    "name": "KINGS College of Engineering",
+    "location": "Punalkulam, Near Thanjavur, Gandarvakottai Taluk, Pudukkottai District, Tamil Nadu - 613303"
+  },
 
+  "courses": {
+    "undergraduate": [
+      "B.E. Civil Engineering",
+      "B.E. Computer Science and Engineering",
+      "B.E. Electronics and Communication Engineering",
+      "B.E. Electrical and Electronics Engineering",
+      "B.E. Mechanical Engineering",
+      "B.Tech Artificial Intelligence and Data Science",
+      "B.Tech Information Technology"
+    ],
+
+    "postgraduate": [
+      "M.E. VLSI Design",
+      "M.E. Thermal Engineering",
+      "M.E. Power Electronics and Drives",
+      "M.E. Computer Science and Engineering",
+      "M.B.A. Master of Business Administration"
+    ],
+
+    "phd": [
+      "Ph.D. Mechanical Engineering",
+      "Ph.D. Electronics and Communication Engineering"
+    ]
+  },
+
+  "chatbot_rule": "Answer college-related questions using only the information available in this JSON. If information is not available, say that it is not currently available in the college database. Do not guess or invent information."
+}
