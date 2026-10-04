@@ -2,11 +2,11 @@ const chatBox = document.getElementById("chatBox");
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 
-// KINGS AI Backend
 const API_URL = "https://kings-college-ai.onrender.com/chat";
 
-// Add message to chat
+
 function addMessage(message, type) {
+
     const div = document.createElement("div");
 
     div.classList.add("message");
@@ -20,35 +20,36 @@ function addMessage(message, type) {
     div.textContent = message;
 
     chatBox.appendChild(div);
+
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Send message to AI
+
 async function sendMessage() {
+
     const message = userInput.value.trim();
 
     if (!message) {
         return;
     }
 
-    // Show user message
     addMessage(message, "user");
 
-    // Clear input
     userInput.value = "";
 
-    // Show loading message
+    sendButton.disabled = true;
+
     addMessage("Thinking... 🤖", "bot");
 
-    const botMessages = document.querySelectorAll(".bot-message");
-    const lastBotMessage = botMessages[botMessages.length - 1];
-
     try {
+
         const response = await fetch(API_URL, {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json"
             },
+
             body: JSON.stringify({
                 message: message
             })
@@ -56,27 +57,67 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        if (response.ok && data.reply) {
-            lastBotMessage.textContent = data.reply;
+        // Remove Thinking message
+        const messages = chatBox.querySelectorAll(".bot-message");
+        const lastBotMessage = messages[messages.length - 1];
+
+        if (lastBotMessage &&
+            lastBotMessage.textContent === "Thinking... 🤖") {
+
+            lastBotMessage.remove();
+        }
+
+        if (data.reply) {
+
+            addMessage(data.reply, "bot");
+
+        } else if (data.error) {
+
+            addMessage(
+                "Sorry 😕 " + data.error,
+                "bot"
+            );
+
         } else {
-            lastBotMessage.textContent =
-                data.error || "Sorry, I couldn't get a response.";
+
+            addMessage(
+                "Sorry, I couldn't understand the response.",
+                "bot"
+            );
         }
 
     } catch (error) {
-        console.error("Connection Error:", error);
 
-        lastBotMessage.textContent =
-            "Unable to connect to KINGS AI server. Please try again.";
+        console.error(error);
+
+        const messages = chatBox.querySelectorAll(".bot-message");
+        const lastBotMessage = messages[messages.length - 1];
+
+        if (lastBotMessage &&
+            lastBotMessage.textContent === "Thinking... 🤖") {
+
+            lastBotMessage.remove();
+        }
+
+        addMessage(
+            "Server connection problem 😕 Please try again.",
+            "bot"
+        );
     }
+
+    sendButton.disabled = false;
+
+    userInput.focus();
 }
 
-// Send button
+
 sendButton.addEventListener("click", sendMessage);
 
-// Press Enter to send
-userInput.addEventListener("keydown", function (event) {
+
+userInput.addEventListener("keydown", function(event) {
+
     if (event.key === "Enter") {
         sendMessage();
     }
+
 });
