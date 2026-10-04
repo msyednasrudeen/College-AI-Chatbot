@@ -2,8 +2,10 @@ const chatBox = document.getElementById("chatBox");
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 
+// KINGS AI Backend
 const API_URL = "https://kings-college-ai.onrender.com/chat";
 
+// Add message to chat
 function addMessage(message, type) {
     const div = document.createElement("div");
 
@@ -16,21 +18,30 @@ function addMessage(message, type) {
     }
 
     div.textContent = message;
+
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+// Send message to AI
 async function sendMessage() {
     const message = userInput.value.trim();
 
-    if (message === "") {
+    if (!message) {
         return;
     }
 
+    // Show user message
     addMessage(message, "user");
+
+    // Clear input
     userInput.value = "";
 
+    // Show loading message
     addMessage("Thinking... 🤖", "bot");
+
+    const botMessages = document.querySelectorAll(".bot-message");
+    const lastBotMessage = botMessages[botMessages.length - 1];
 
     try {
         const response = await fetch(API_URL, {
@@ -45,29 +56,26 @@ async function sendMessage() {
 
         const data = await response.json();
 
-        const messages = document.querySelectorAll(".bot-message");
-        const lastMessage = messages[messages.length - 1];
-
-        if (data.reply) {
-            lastMessage.textContent = data.reply;
+        if (response.ok && data.reply) {
+            lastBotMessage.textContent = data.reply;
         } else {
-            lastMessage.textContent = "Sorry, something went wrong.";
+            lastBotMessage.textContent =
+                data.error || "Sorry, I couldn't get a response.";
         }
 
     } catch (error) {
-        console.error(error);
+        console.error("Connection Error:", error);
 
-        const messages = document.querySelectorAll(".bot-message");
-        const lastMessage = messages[messages.length - 1];
-
-        lastMessage.textContent =
-            "Unable to connect to AI server. Please try again.";
+        lastBotMessage.textContent =
+            "Unable to connect to KINGS AI server. Please try again.";
     }
 }
 
+// Send button
 sendButton.addEventListener("click", sendMessage);
 
-userInput.addEventListener("keydown", function(event) {
+// Press Enter to send
+userInput.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         sendMessage();
     }
