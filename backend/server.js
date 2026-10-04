@@ -1,8 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
-const fs = require("fs");
-const path = require("path");
+const cheerio = require("cheerio");
 
 const app = express();
 
@@ -11,29 +10,44 @@ app.use(express.json());
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-// Load college data
-const collegeDataPath = path.join(__dirname, "College.json");
+const WEBSITE = "https://www.kingsengg.edu.in/";
 
-let collegeData = {};
+async function getCollegeWebsiteData() {
+    try {
+        const response = await axios.get(WEBSITE, {
+            timeout: 10000,
+            headers: {
+                "User-Agent": "KINGS-AI-College-Chatbot"
+            }
+        });
 
-try {
-    collegeData = JSON.parse(
-        fs.readFileSync(collegeDataPath, "utf8")
-    );
+        const $ = cheerio.load(response.data);
 
-    console.log("College data loaded successfully!");
-} catch (error) {
-    console.error("College.json could not be loaded:", error.message);
+        $("script, style, noscript").remove();
+
+        const text = $("body")
+            .text()
+            .replace(/\s+/g, " ")
+            .trim();
+
+        return text;
+
+    } catch (error) {
+        console.error(
+            "Website fetch error:",
+            error.message
+        );
+
+        return "";
+    }
 }
 
-// Home route
 app.get("/", (req, res) => {
     res.json({
         message: "KINGS AI Backend is running!"
     });
 });
 
-// Chat route
 app.post("/chat", async (req, res) => {
     try {
         const userMessage = req.body.message;
@@ -50,11 +64,7 @@ app.post("/chat", async (req, res) => {
             });
         }
 
-        const collegeContext = JSON.stringify(
-            collegeData,
-            null,
-            2
-        );
+        const websiteData = await getCollegeWebsiteData();
 
         const response = await axios.post(
             "https://openrouter.ai/api/v1/chat/completions",
@@ -65,34 +75,33 @@ app.post("/chat", async (req, res) => {
                     {
                         role: "system",
                         content:
-                            "You are KINGS AI, the official AI assistant for KINGS College of Engineering, Punalkulam, Pudukkottai, Tamil Nadu.\n\n" +
+                            "You are KINGS AI, the AI assistant for KINGS College of Engineering, Punalkulam, Pudukkottai, Tamil Nadu.\n\n" +
 
-                            "Answer college-related questions using the college database provided below.\n\n" +
+                            "Use the official college website information provided below to answer the user's question.\n\n" +
 
-                            "COLLEGE DATABASE:\n" +
-                            collegeContext +
+                            "OFFICIAL WEBSITE INFORMATION:\n" +
+                            websiteData +
                             "\n\n" +
 
-                            "IMPORTANT RULES:\n" +
-                            "1. Use the college database whenever possible.\n" +
-                            "2. Do not invent or guess college information.\n" +
-                            "3. If the requested information is not available in the database, clearly say that it is not currently available in the college database.\n" +
-                            "4. Give short, clear and helpful answers.\n" +
-                            "5. If the user asks about courses, list the relevant courses clearly."
+                            "RULES:\n" +
+                            "1. Prefer the official website information.\n" +
+                            "2. Do not invent college information.\n" +
+                            "3. If the website information does not contain the answer, say that the information is not currently available.\n" +
+                            "4. Give simple and clear answers.\n" +
+                            "5. For courses, departments, admissions, contact information and facilities, use the available official information."
                     },
-
                     {
                         role: "user",
                         content: userMessage
                     }
                 ]
             },
-
             {
                 headers: {
                     "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
                     "Content-Type": "application/json",
-                    "HTTP-Referer": "https://msyednasrudeen.github.io/College-AI-Chatbot/",
+                    "HTTP-Referer":
+                        "https://msyednasrudeen.github.io/College-AI-Chatbot/",
                     "X-Title": "KINGS AI College Chatbot"
                 }
             }
@@ -106,9 +115,8 @@ app.post("/chat", async (req, res) => {
         });
 
     } catch (error) {
-
         console.error(
-            "OpenRouter Error:",
+            "Chat error:",
             error.response?.data || error.message
         );
 
