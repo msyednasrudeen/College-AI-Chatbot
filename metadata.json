@@ -1,0 +1,6 @@
+{
+  "name": "KINGS AI - Kings College of Engineering",
+  "description": "Official intelligent AI assistant and chatbot for Kings College of Engineering, Punalkulam, Pudukkottai, Tamil Nadu. Get instant answers about departments, courses, admissions, fees, and campus life in English and Tamil.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
